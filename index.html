@@ -1,8 +1,50 @@
-<!DOCTYPE html>
+## 🛑 Subdomain Takeover – `shop.beta.starlink.com`
+
+### 🔍 Description:
+The subdomain `shop.beta.starlink.com` is delegated in DNS but is not currently bound to an active service in Fastly. When accessed, it returns a **known Fastly error page** indicating it is unclaimed:
+
+> **Fastly error: unknown domain: shop.beta.starlink.com**
+
+This behavior is documented as a common subdomain takeover vector ([GitHub Issue #22](https://github.com/EdOverflow/can-i-take-over-xyz/issues/22)).
+
+---
+
+### 💥 Business Impact:
+If claimed by an attacker, this subdomain could be used to:
+- Host phishing or fake pages under a trusted Starlink domain
+- Harvest credentials or impersonate the Starlink brand
+- Exploit trust in bookmarked or indexed URLs
+
+---
+
+### 📋 Steps to Reproduce:
+
+1. Run a DNS query:
+    ```bash
+    dig CNAME shop.beta.starlink.com
+    ```
+
+2. Visit the URL:
+    ```
+    http://shop.beta.starlink.com
+    ```
+
+3. Observe the response:
+    ```
+    Fastly error: unknown domain shop.beta.starlink.com
+    ```
+
+4. This confirms the domain is **unclaimed on Fastly** and eligible for takeover.
+
+---
+
+### 🖼️ Proof of Concept (HTML Snippet):
+
+```html
 <html>
-  <head><title>PoC</title></head>
-  <body>
-    <h1>✅ Subdomain takeover by @Reyzee</h1>
-    <p>This is a PoC for Bugcrowd...</p>
-  </body>
-</html>
+<head>
+<title>Fastly error: unknown domain shop.beta.starlink.com</title>
+</head>
+<body>
+<p>Fastly error: unknown domain: shop.beta.starlink.com. Please check that this domain has been added to a service.</p>
+<p>Details: cache-mad22039-MAD (151.101.66.133)</p></body></html>
